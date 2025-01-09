@@ -1,7 +1,54 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:csv/csv.dart';
+import 'package:path_provider/path_provider.dart';
+import 'signup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  LoginScreen({super.key});
+
+  Future<List<List<dynamic>>> readCsv() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = '${directory.path}/users.csv';
+    final file = File(filePath);
+
+    if (!await file.exists()) {
+      return [];
+    }
+
+    final content = await file.readAsString();
+    final rows = const CsvToListConverter().convert(content);
+    return rows;
+  }
+
+  Future<void> login(BuildContext context) async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Email and password are required!')),
+      );
+      return;
+    }
+
+    final rows = await readCsv();
+    for (int i = 1; i < rows.length; i++) {
+      if (rows[i][1] == email && rows[i][2] == password) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login successful!')),
+        );
+        return;
+      }
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Invalid email or password!')),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,28 +79,33 @@ class LoginScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 20),
                         Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do',
+                          'Welcome back! Please sign in to continue.',
                           textAlign: TextAlign.center,
-                          style:
-                              TextStyle(color: Colors.grey, fontSize: 14),
+                          style: TextStyle(color: Colors.grey, fontSize: 14),
                         ),
                         SizedBox(height: 50),
                         TextField(
+                          controller: emailController,
                           decoration: InputDecoration(
-                            labelText: 'Enter Email',
-                            hintText: 'your_mail@gmail.com',
+                            labelText: 'Email',
+                            hintText: 'your_email@gmail.com',
                             hintStyle: TextStyle(
                               color: Colors.grey.withOpacity(0.6),
                             ),
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                         ),
-                        SizedBox(height: 50),
+                        SizedBox(height: 20),
                         TextField(
+                          controller: passwordController,
                           decoration: InputDecoration(
                             labelText: 'Password',
                             suffixIcon: Icon(Icons.visibility_off),
-                            border: OutlineInputBorder(),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                           obscureText: true,
                         ),
@@ -61,17 +113,17 @@ class LoginScreen extends StatelessWidget {
                           alignment: Alignment.centerRight,
                           child: TextButton(
                             onPressed: () {},
-                            child: Text('Forget Password?'),
+                            child: Text('Forgot Password?'),
                           ),
                         ),
                         SizedBox(
-                          width: 50,
+                          width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () => login(context),
                             style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.symmetric(vertical: 15),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
+                                borderRadius: BorderRadius.circular(8),
                               ),
                               elevation: 5,
                             ),
@@ -81,7 +133,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: 60),
+                        SizedBox(height: 40),
                         Row(
                           children: [
                             Expanded(child: Divider(thickness: 1)),
@@ -93,7 +145,7 @@ class LoginScreen extends StatelessWidget {
                             Expanded(child: Divider(thickness: 1)),
                           ],
                         ),
-                        SizedBox(height: 50),
+                        SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -113,7 +165,14 @@ class LoginScreen extends StatelessWidget {
                           children: [
                             Text("Don't have an account? "),
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SignupScreen(),
+                                  ),
+                                );
+                              },
                               child: Text(
                                 'Sign Up Now',
                                 style: TextStyle(color: Colors.blue),

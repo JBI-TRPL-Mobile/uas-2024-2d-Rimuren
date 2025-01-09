@@ -56,11 +56,11 @@ class DescriptionText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      "Welcome",
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do',
       textAlign: TextAlign.center,
       style: TextStyle(
         fontSize: 16,
-        color: const Color.fromARGB(255, 0, 0, 0),
+        color: Colors.black,
       ),
     );
   }
@@ -81,35 +81,41 @@ class ActionButtons extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(5),
             ),
             backgroundColor: Colors.white,
             elevation: 5,
           ),
           child: Row(
             children: [
-              Icon(Icons.login),
               SizedBox(width: 5),
-              Text("Sign In"),
+              Text(
+                "Sign In",
+                style: TextStyle(color: Colors.black),
+              ),
             ],
           ),
         ),
         SizedBox(width: 20),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+             Navigator.pushNamed(context, '/signup');
+          },
           style: ElevatedButton.styleFrom(
             padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(5),
             ),
             backgroundColor: Colors.white,
             elevation: 5,
           ),
           child: Row(
             children: [
-              Icon(Icons.app_registration),
               SizedBox(width: 5),
-              Text("Sign Up"),
+              Text(
+                "Sign Up",
+                style: TextStyle(color: Colors.black),
+              ),
             ],
           ),
         ),

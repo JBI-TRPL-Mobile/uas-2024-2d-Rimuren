@@ -1,8 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:csv/csv.dart';
-import 'package:path_provider/path_provider.dart';
-import 'signup_screen.dart';
+import 'package:template_project/screens/dashboard_screen.dart';
+import 'package:template_project/screens/signup_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -10,21 +8,7 @@ class LoginScreen extends StatelessWidget {
 
   LoginScreen({super.key});
 
-  Future<List<List<dynamic>>> readCsv() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final filePath = '${directory.path}/users.csv';
-    final file = File(filePath);
-
-    if (!await file.exists()) {
-      return [];
-    }
-
-    final content = await file.readAsString();
-    final rows = const CsvToListConverter().convert(content);
-    return rows;
-  }
-
-  Future<void> login(BuildContext context) async {
+  void login(BuildContext context) {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
 
@@ -35,19 +19,18 @@ class LoginScreen extends StatelessWidget {
       return;
     }
 
-    final rows = await readCsv();
-    for (int i = 1; i < rows.length; i++) {
-      if (rows[i][1] == email && rows[i][2] == password) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login successful!')),
-        );
-        return;
-      }
+    if (email == "admin@example.com" && password == "password123") {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DashboardScreen(),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Invalid email or password!')),
+      );
     }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Invalid email or password!')),
-    );
   }
 
   @override

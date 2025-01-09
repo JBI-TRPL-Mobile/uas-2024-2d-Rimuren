@@ -19,7 +19,7 @@ class LoginScreen extends StatelessWidget {
       return;
     }
 
-    if (email == "admin@example.com" && password == "password123") {
+    if (email == "admin" && password == "123") {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,20 +35,20 @@ class LoginScreen extends StatelessWidget {
                           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do',
                           textAlign: TextAlign.center,
                           style:
-                              TextStyle(color: Colors.grey[600], fontSize: 14),
+                              TextStyle(color: Colors.grey, fontSize: 14),
                         ),
-                        SizedBox(height: 40),
+                        SizedBox(height: 50),
                         TextField(
                           decoration: InputDecoration(
                             labelText: 'Enter Email',
-                            hintText: 'youremail@gmail.com',
+                            hintText: 'your_mail@gmail.com',
                             hintStyle: TextStyle(
-                              color: Colors.grey.withOpacity(0.7),
+                              color: Colors.grey.withOpacity(0.6),
                             ),
                             border: OutlineInputBorder(),
                           ),
                         ),
-                        SizedBox(height: 40),
+                        SizedBox(height: 50),
                         TextField(
                           decoration: InputDecoration(
                             labelText: 'Password',
@@ -63,13 +65,13 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(
-                          width: 150,
+                          width: 50,
                           child: ElevatedButton(
                             onPressed: () {},
                             style: ElevatedButton.styleFrom(
                               padding: EdgeInsets.symmetric(vertical: 15),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(5),
                               ),
                               elevation: 5,
                             ),
@@ -79,7 +81,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 60),
                         Row(
                           children: [
                             Expanded(child: Divider(thickness: 1)),
@@ -91,7 +93,7 @@ class LoginScreen extends StatelessWidget {
                             Expanded(child: Divider(thickness: 1)),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 50),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

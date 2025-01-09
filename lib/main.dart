@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:template_project/screens/login_screen.dart';
 import 'package:template_project/screens/welcome.dart';
+import 'package:template_project/screens/login_screen.dart';
+import 'package:template_project/screens/signup_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,7 +10,7 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override 
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => Welcome(),
         '/login': (context) => LoginScreen(),
+        '/signup': (context) => SignupScreen(),
       },
     );
   }

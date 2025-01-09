@@ -1,8 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:csv/csv.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:template_project/screens/login_screen.dart';
+import 'package:template_project/screens/welcome.dart';
 
 class SignupScreen extends StatelessWidget {
   final TextEditingController nameController = TextEditingController();
@@ -12,31 +10,48 @@ class SignupScreen extends StatelessWidget {
 
   SignupScreen({super.key});
 
-  Future<String> getFilePath() async {
-    final directory = await getApplicationDocumentsDirectory();
-    return '${directory.path}/users.csv';
-  }
+  void register(BuildContext context) {
+    final name = nameController.text.trim();
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+    final confirmPassword = confirmPasswordController.text.trim();
 
-  Future<void> saveToCsv(String name, String email, String password) async {
-    final filePath = await getFilePath();
-    final file = File(filePath);
-
-    if (!await file.exists()) {
-      await file.writeAsString(const ListToCsvConverter().convert([
-        ['Name', 'Email', 'Password']
-      ]));
+    if (name.isEmpty || email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('All fields are required!')),
+      );
+      return;
     }
 
-    final csvData = <List<String>>[
-      [name, email, password]
-    ];
-    final csv = const ListToCsvConverter().convert(csvData);
-    await file.writeAsString('$csv\n', mode: FileMode.append);
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Passwords do not match!')),
+      );
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Account created successfully!')),
+    );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => Welcome()),
+            );
+          },
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -58,7 +73,7 @@ class SignupScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do',
+                          'Create an account to get started!',
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.grey, fontSize: 14),
                         ),
@@ -106,7 +121,7 @@ class SignupScreen extends StatelessWidget {
                         TextField(
                           controller: confirmPasswordController,
                           decoration: InputDecoration(
-                            labelText: 'Confirm',
+                            labelText: 'Confirm Password',
                             suffixIcon: Icon(Icons.visibility_off),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -116,38 +131,7 @@ class SignupScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 30),
                         ElevatedButton(
-                          onPressed: () async {
-                            final name = nameController.text;
-                            final email = emailController.text;
-                            final password = passwordController.text;
-                            final confirmPassword = confirmPasswordController.text;
-
-                            if (name.isEmpty ||
-                                email.isEmpty ||
-                                password.isEmpty ||
-                                confirmPassword.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('All fields are required!')),
-                              );
-                              return;
-                            }
-
-                            if (password != confirmPassword) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Passwords do not match!')),
-                              );
-                              return;
-                            }
-
-                            await saveToCsv(name, email, password);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Account created successfully!')),
-                            );
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => LoginScreen()),
-                            );
-                          },
+                          onPressed: () => register(context),
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(vertical: 15),
                             shape: RoundedRectangleBorder(
